@@ -38,12 +38,12 @@ class DatabaseHelper {
   void _createDb(Database db, int newVersion) async {
     await db.execute(
         'CREATE TABLE $todoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT, '
-        '$colDescription TEXT, )');
+        '$colDescription TEXT, $colDate TEXT)');
   }
 
   Future<List<Map<String, dynamic>>> getTodoMapList() async {
     Database db = await database;
-    var result = await db.query(todoTable, orderBy: '$colTitle ASC');
+    var result = await db.query(todoTable, orderBy: '$colDate DESC');
     return result;
   }
 
@@ -65,6 +65,14 @@ class DatabaseHelper {
     int result =
         await db.delete(todoTable, where: '$colId = ?', whereArgs: [id]);
     return result;
+  }
+
+  Future<int> getCount() async {
+    Database db = await database;
+    List<Map<String, dynamic>> x =
+        await db.rawQuery('SELECT COUNT(*) FROM $todoTable');
+    int? result = Sqflite.firstIntValue(x);
+    return result ?? 0;
   }
 
   Future<List<Todo>> getTodoList() async {

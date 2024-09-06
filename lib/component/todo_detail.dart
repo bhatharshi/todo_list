@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:assignment_todo/db/db_helper.dart';
 import 'package:assignment_todo/model/todo_model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For DateFormat
 
 class TodoDetail extends StatefulWidget {
   final String appBarTitle;
@@ -165,9 +164,9 @@ class TodoDetailState extends State<TodoDetail> {
 
     int result;
     if (todo.id != null) {
-      result = await helper.updateTodo(todo); // Update operation
+      result = await helper.updateTodo(todo);
     } else {
-      result = await helper.insertTodo(todo); // Insert operation
+      result = await helper.insertTodo(todo);
     }
 
     if (result != 0) {
