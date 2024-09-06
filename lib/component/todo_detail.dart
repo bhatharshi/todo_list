@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, no_logic_in_create_state
+
 import 'dart:async';
 import 'package:assignment_todo/db/db_helper.dart';
 import 'package:assignment_todo/model/todo_model.dart';
@@ -8,11 +10,11 @@ class TodoDetail extends StatefulWidget {
   final String appBarTitle;
   final Todo todo;
 
-  TodoDetail(this.todo, this.appBarTitle);
+  const TodoDetail(this.todo, this.appBarTitle, {super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return TodoDetailState(this.todo, this.appBarTitle);
+    return TodoDetailState(todo, appBarTitle);
   }
 }
 
@@ -47,18 +49,18 @@ class TodoDetailState extends State<TodoDetail> {
         appBar: AppBar(
           title: Text(appBarTitle),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               moveToLastScreen();
             },
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
+          padding: const EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
           child: ListView(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                 child: TextField(
                   controller: titleController,
                   style: textStyle,
@@ -76,7 +78,7 @@ class TodoDetailState extends State<TodoDetail> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                 child: TextField(
                   controller: descriptionController,
                   style: textStyle,
@@ -94,7 +96,7 @@ class TodoDetailState extends State<TodoDetail> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -102,9 +104,9 @@ class TodoDetailState extends State<TodoDetail> {
                         style: ElevatedButton.styleFrom(
                           iconColor: Theme.of(context).primaryColorDark,
                           backgroundColor: Theme.of(context).primaryColorLight,
-                          padding: EdgeInsets.symmetric(vertical: 15.0),
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Save',
                           textScaleFactor: 1.5,
                         ),
@@ -122,9 +124,9 @@ class TodoDetailState extends State<TodoDetail> {
                         style: ElevatedButton.styleFrom(
                           iconColor: Theme.of(context).primaryColorDark,
                           backgroundColor: Theme.of(context).primaryColorLight,
-                          padding: EdgeInsets.symmetric(vertical: 15.0),
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Delete',
                           textScaleFactor: 1.5,
                         ),
@@ -161,7 +163,6 @@ class TodoDetailState extends State<TodoDetail> {
   void _save() async {
     moveToLastScreen();
 
-    todo.date = DateFormat.yMMMd().format(DateTime.now());
     int result;
     if (todo.id != null) {
       result = await helper.updateTodo(todo); // Update operation

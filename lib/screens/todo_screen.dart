@@ -14,7 +14,7 @@ class TodoScreen extends StatefulWidget {
 
 class TodoScreenState extends State<TodoScreen> {
   DatabaseHelper databaseHelper = DatabaseHelper();
-  List<Todo> todoList = List<Todo>.empty(growable: true); // Null safety
+  List<Todo> todoList = List<Todo>.empty(growable: true);
   int count = 0;
 
   @override
@@ -25,50 +25,75 @@ class TodoScreenState extends State<TodoScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Todos'),
+        title: const Text('Todos'),
       ),
       body: getTodoListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint('FAB clicked');
-          navigateToDetail(Todo('', '', ''), 'Add Todo');
+          navigateToDetail(
+              Todo(
+                '',
+                '',
+              ),
+              'Add Todo');
         },
         tooltip: 'Add Todo',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   ListView getTodoListView() {
-    return ListView.builder(
-      itemCount: count,
-      itemBuilder: (BuildContext context, int position) {
-        return Card(
-          color: Colors.white,
-          elevation: 2.0,
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.amber,
-              child: Text(getFirstLetter(todoList[position].title),
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+    if (todoList.isEmpty) {
+      return ListView(
+        children: const [
+          Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Text(
+                'No Data Found',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
             ),
-            title: Text(todoList[position].title,
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(todoList[position].description),
-            trailing: GestureDetector(
-              child: Icon(Icons.delete, color: Colors.red),
+          ),
+        ],
+      );
+    } else {
+      return ListView.builder(
+        itemCount: count,
+        itemBuilder: (BuildContext context, int position) {
+          return Card(
+            color: Colors.white,
+            elevation: 2.0,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.amber,
+                child: Text(getFirstLetter(todoList[position].title),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              title: Text(todoList[position].title,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(todoList[position].description),
+              trailing: GestureDetector(
+                child: const Icon(Icons.delete, color: Colors.red),
+                onTap: () {
+                  _delete(context, todoList[position]);
+                },
+              ),
               onTap: () {
-                _delete(context, todoList[position]);
+                debugPrint("ListTile Tapped");
+                navigateToDetail(todoList[position], 'Edit Todo');
               },
             ),
-            onTap: () {
-              debugPrint("ListTile Tapped");
-              navigateToDetail(todoList[position], 'Edit Todo');
-            },
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    }
   }
 
   String getFirstLetter(String title) {
